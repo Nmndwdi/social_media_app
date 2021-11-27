@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,13 @@ public class login_fragment extends Fragment {
                 });
             }
         });
-
+        GoogleSignInClient googleSignInClient=username_fragment.getInstance().create_request();
+        binding.google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                username_fragment.getInstance().signIn(googleSignInClient);
+            }
+        });
         return view;
     }
 }

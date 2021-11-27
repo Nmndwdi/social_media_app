@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/profile_image"
+        android:elevation="3dp"
+        android:layout_margin="1dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/avengers">
+
+    </ImageView>
+
+
+</androidx.cardview.widget.CardView>

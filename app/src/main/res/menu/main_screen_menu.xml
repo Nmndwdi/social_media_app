@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"><![CDATA[>]]>
+
+
+    <item
+        android:id="@+id/Add"
+        android:icon="@drawable/add_main_screen"
+        android:title="Add"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/post"
+                android:icon="@drawable/facebook"
+                android:title="Post"
+                app:showAsAction="withText" />
+            <item
+                android:id="@+id/story"
+                android:icon="@drawable/google"
+                android:title="Story"
+                app:showAsAction="withText" />
+        </menu>
+    </item>
+    <item android:title="Chats"
+        android:id="@+id/chats"
+        app:showAsAction="always"
+        android:icon="@drawable/chat"/>
+</menu>

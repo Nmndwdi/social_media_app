@@ -20,7 +20,7 @@ public class signup_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         username_fragment username_fragment=new username_fragment();
         FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.linear,username_fragment);
