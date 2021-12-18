@@ -51,10 +51,6 @@ public class username_fragment extends Fragment {
         binding.next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle=new Bundle();
-                bundle.putString("username",binding.username.getText().toString());
-                bundle.putString("fullname",binding.fullname.getText().toString());
-                signup_fragment.setArguments(bundle);
                 transaction.replace(R.id.linear,signup_fragment)
                         .addToBackStack(null).
                         commit();
@@ -67,6 +63,14 @@ public class username_fragment extends Fragment {
                 transaction.replace(R.id.linear,login_fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+            }
+        });
+
+        GoogleSignInClient googleSignInClient=create_request();
+        binding.google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn(googleSignInClient);
             }
         });
 
@@ -128,8 +132,20 @@ public class username_fragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getContext(), "signInWithCredential:success", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = auth.getCurrentUser();
-                            Intent intent=new Intent(getContext(), MainActivity.class);
-                            startActivity(intent);
+                            String userid=user.getUid();
+                            String email="";
+                            GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(getContext());
+                            if(account!=null)
+                            {
+                                email= account.getEmail();
+                            }
+                            Bundle bundle=new Bundle();
+                            bundle.putString("userid",userid);
+                            bundle.putString("email",email);
+                            google_sign_in_info_fragment google_sign_in_info_fragment=new google_sign_in_info_fragment();
+                            FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
+                            google_sign_in_info_fragment.setArguments(bundle);
+                            transaction.replace(R.id.linear,google_sign_in_info_fragment).commit();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(getContext(), "signInWithCredential:failure", Toast.LENGTH_SHORT).show();

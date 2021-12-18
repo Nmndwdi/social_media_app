@@ -1,33 +1,19 @@
 package com.example.social_media_app;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.example.social_media_app.Adapters.main_screen_fragments_adapter;
 import com.example.social_media_app.animationss.DepthPageTransformer;
+import com.example.social_media_app.databasing.databasing_write;
 import com.example.social_media_app.databinding.ActivityMainBinding;
-import com.example.social_media_app.fragments.main_screen_fragment;
-import com.example.social_media_app.fragments.user_profile_fragment;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
 import com.example.social_media_app.holder_fragments.search_screen_holder_fragment;
-import com.example.social_media_app.signing.signup_activity;
-import com.example.social_media_app.signing.username_fragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     TabLayout tabLayout;
     ViewPager viewPager;
+    int backButtonCount=0;
     //private static MainActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         //instance=this;
         viewPager.setOffscreenPageLimit(2);
 
-
+        databasing_write databasing=new databasing_write();
+        databasing.getdata();
 
 
 //        binding.delete.setOnClickListener(new View.OnClickListener() {
@@ -146,15 +134,29 @@ public class MainActivity extends AppCompatActivity {
             int size= main_screen_holder_fragment.getInstance().main_screen_stack_size();
             if(size==0)
             {
-                super.onBackPressed();
+                if(backButtonCount >= 1)
+                {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    backButtonCount=0;
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+                    backButtonCount++;
+                }
             }
             else
             {
+                backButtonCount=0;
                 main_screen_holder_fragment.getInstance().main_screen_pop();
             }
         }
         else if(viewPager.getCurrentItem()==1)
         {
+            backButtonCount=0;
             int size= search_screen_holder_fragment.getInstance().search_screen_stack_size();
             if(size==0)
             {
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(viewPager.getCurrentItem()==2)
         {
+            backButtonCount=0;
             viewPager.setCurrentItem(1,true);
         }
     }
