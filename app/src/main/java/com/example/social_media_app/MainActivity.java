@@ -13,6 +13,7 @@ import com.example.social_media_app.databasing.databasing_write;
 import com.example.social_media_app.databinding.ActivityMainBinding;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
 import com.example.social_media_app.holder_fragments.search_screen_holder_fragment;
+import com.example.social_media_app.signing.signup_activity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -144,8 +145,21 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Press again to exit", Toast.LENGTH_SHORT).show();
                     backButtonCount++;
+                    Thread thread=new Thread()
+                    {
+                        public void run()
+                        {
+                            try {
+                                sleep(2000);
+                                backButtonCount=0;
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    thread.start();
                 }
             }
             else

@@ -27,6 +27,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class signup_activity extends AppCompatActivity {
     ActivitySignupBinding binding;
     FirebaseAuth auth;
+    int backButtonCount = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,39 +50,6 @@ public class signup_activity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             String userid = user.getUid();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Boys").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String uid = document.getId();
-                            if (userid.equals(uid)) {
-                                Intent intent = new Intent(signup_activity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    } else {
-                        Log.d("Error", "Error during gettin document");
-                    }
-                }
-            });
-            db.collection("Girls").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String uid = document.getId();
-                            if (userid.equals(uid)) {
-                                Intent intent = new Intent(signup_activity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    } else {
-                        Log.d("Error", "Error during gettin document");
-                    }
-                }
-            });
 
             String email = "";
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
@@ -94,6 +63,33 @@ public class signup_activity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             google_sign_in_info_fragment.setArguments(bundle);
             transaction.replace(R.id.linear, google_sign_in_info_fragment).commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backButtonCount >= 1) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            backButtonCount = 0;
+            startActivity(intent);
+        } else {
+            Toast.makeText(signup_activity.this, "Press again to exit", Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+            Thread thread=new Thread()
+            {
+                public void run()
+                {
+                    try {
+                        sleep(2000);
+                        backButtonCount=0;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            thread.start();
         }
     }
 }
