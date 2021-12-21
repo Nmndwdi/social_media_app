@@ -54,12 +54,15 @@ public class main_screen_fragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId())
                 {
-                    case R.id.post:
-                        Toast.makeText(getContext(), "create the post", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.story:
-                        Toast.makeText(getContext(), "create the story", Toast.LENGTH_SHORT).show();
-                        return true;
+//                    case R.id.post:
+//                        post_fragment post_fragment=new post_fragment();
+//                        FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
+//                        transaction.replace(R.id.main_screen_holder,post_fragment).commit();
+//                        Toast.makeText(getContext(), "create the post", Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    case R.id.story:
+//                        Toast.makeText(getContext(), "create the story", Toast.LENGTH_SHORT).show();
+//                        return true;
                     case R.id.chats:
                         Toast.makeText(getContext(), "create the chats", Toast.LENGTH_SHORT).show();
                     default:

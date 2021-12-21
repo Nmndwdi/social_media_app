@@ -12,6 +12,7 @@ import com.example.social_media_app.animationss.DepthPageTransformer;
 import com.example.social_media_app.databasing.databasing_write;
 import com.example.social_media_app.databinding.ActivityMainBinding;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
+import com.example.social_media_app.holder_fragments.profile_holder_fragment;
 import com.example.social_media_app.holder_fragments.search_screen_holder_fragment;
 import com.example.social_media_app.signing.signup_activity;
 import com.google.android.material.tabs.TabLayout;
@@ -184,7 +185,14 @@ public class MainActivity extends AppCompatActivity {
         else if(viewPager.getCurrentItem()==2)
         {
             backButtonCount=0;
-            viewPager.setCurrentItem(1,true);
+            int size= profile_holder_fragment.getInstance().profile_screen_stack_size();
+            if(size==0) {
+                viewPager.setCurrentItem(1, true);
+            }
+            else
+            {
+                profile_holder_fragment.getInstance().profile_screen_pop();
+            }
         }
     }
 }

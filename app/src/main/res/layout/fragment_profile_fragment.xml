@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context=".fragments.profile_fragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/profile_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Username"
+        app:titleTextColor="@color/white"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
