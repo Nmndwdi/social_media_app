@@ -1,9 +1,11 @@
 package com.example.social_media_app.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.social_media_app.Adapters.main_screen_adapter_recyclerview;
 import com.example.social_media_app.R;
@@ -47,22 +48,25 @@ public class main_screen_fragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.post:
-                Toast.makeText(getContext(), "add a post", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.story:
-                Toast.makeText(getContext(), "add a story", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.chats:
-                Toast.makeText(getContext(), "Recent Chats", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-        return true;
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId())
+                {
+                    case R.id.post:
+                        Toast.makeText(getContext(), "create the post", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.story:
+                        Toast.makeText(getContext(), "create the story", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.chats:
+                        Toast.makeText(getContext(), "create the chats", Toast.LENGTH_SHORT).show();
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @Override
