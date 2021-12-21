@@ -21,8 +21,9 @@
                 app:showAsAction="withText" />
         </menu>
     </item>
-    <item android:title="Chats"
+    <item
         android:id="@+id/chats"
+        android:title="Chats"
         app:showAsAction="always"
         android:icon="@drawable/chat"/>
 </menu>
