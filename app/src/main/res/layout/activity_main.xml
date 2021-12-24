@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:elevation="3dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -32,7 +33,47 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-<!--    <LinearLayout-->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/main_screen_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/main_screen_tabs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!--<com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/main_screen_tabs"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#FFFFFF"-->
+<!--        android:elevation="3dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:tabGravity="fill"-->
+<!--        app:tabIndicatorColor="@color/black"-->
+<!--        app:tabSelectedTextColor="#0000FF"-->
+<!--        app:tabTextColor="#000000">-->
+
+
+<!--    </com.google.android.material.tabs.TabLayout>-->
+<!--    <androidx.viewpager.widget.ViewPager-->
+<!--        android:id="@+id/main_screen_viewpager"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:elevation="3dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/main_screen_tabs"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"/>-->
+
+
+    <!--    <LinearLayout-->
 <!--        android:layout_width="0dp"-->
 <!--        android:layout_height="0dp"-->
 <!--        android:orientation="vertical"-->
@@ -50,16 +91,6 @@
 
 <!--    </LinearLayout>-->
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/main_screen_viewpager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:elevation="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/main_screen_tabs"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <!--    <LinearLayout-->

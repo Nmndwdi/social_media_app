@@ -52,6 +52,7 @@ public class google_sign_in_info_fragment extends Fragment {
                 databasing_write databasing_write=new databasing_write(username,fullname,email,gender,userid,age);
                 databasing_write.create_account_google();
                 Intent intent=new Intent(getContext(), MainActivity.class);
+                intent.putExtra("gender_key",gender);
                 startActivity(intent);
             }
         });

@@ -64,14 +64,14 @@ public class Search_fragment extends Fragment {
     {
         return instance;
     }
-    public void switch_fragment()
+    public void switch_user_profile_fragment()
     {
+        Bundle bundle=new Bundle();
+        bundle.putString("index_fragment","search_fragment");
         user_profile_fragment user_profile_fragment=new user_profile_fragment();
         search_screen_holder_fragment.getInstance().search_screen_search_fragment_push();
-        //Search_fragment search_fragment=new Search_fragment();
+        user_profile_fragment.setArguments(bundle);
         FragmentTransaction transaction= getParentFragmentManager().beginTransaction();
-        //transaction.hide(search_fragment);
-//        transaction.replace(((ViewGroup)(getView().getParent())).getId(),user_profile_fragment).addToBackStack(null).commit();
         transaction.replace(R.id.search_screen_holder,user_profile_fragment).commit();
     }
 }

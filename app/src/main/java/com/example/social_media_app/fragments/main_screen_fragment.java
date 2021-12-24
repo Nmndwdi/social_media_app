@@ -1,5 +1,6 @@
 package com.example.social_media_app.fragments;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +21,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.social_media_app.Adapters.main_screen_adapter_recyclerview;
+import com.example.social_media_app.MainActivity;
 import com.example.social_media_app.R;
+import com.example.social_media_app.databasing.databasing_read;
 import com.example.social_media_app.databinding.FragmentMainScreenFragmentBinding;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
 import com.example.social_media_app.model_classes.main_screen_model_class;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -31,6 +41,9 @@ public class main_screen_fragment extends Fragment {
     FragmentMainScreenFragmentBinding binding;
     ArrayList<main_screen_model_class>arrayList=new ArrayList<>();
     private static main_screen_fragment instance;
+
+    FirebaseAuth auth;
+    FirebaseFirestore db;
 
     public main_screen_fragment() {
         // Required empty public constructor
@@ -54,17 +67,9 @@ public class main_screen_fragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId())
                 {
-//                    case R.id.post:
-//                        post_fragment post_fragment=new post_fragment();
-//                        FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
-//                        transaction.replace(R.id.main_screen_holder,post_fragment).commit();
-//                        Toast.makeText(getContext(), "create the post", Toast.LENGTH_SHORT).show();
-//                        return true;
-//                    case R.id.story:
-//                        Toast.makeText(getContext(), "create the story", Toast.LENGTH_SHORT).show();
-//                        return true;
                     case R.id.chats:
-                        Toast.makeText(getContext(), "create the chats", Toast.LENGTH_SHORT).show();
+                        chats_fragment chats_fragment=new chats_fragment();
+                        chats_fragment.show(getParentFragmentManager(),chats_fragment.getTag());
                     default:
                         return false;
                 }
@@ -82,27 +87,42 @@ public class main_screen_fragment extends Fragment {
         binding.toolbar.inflateMenu(R.menu.main_screen_menu);
 
         binding.mainScreenRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        main_screen_model_class main_screen_model_class1=new main_screen_model_class();
-        main_screen_model_class1.setUsername("amnydv");
-        main_screen_model_class1.setFullname("Aman yadav");
-        main_screen_model_class1.setLastmessage("Hello i am on your app");
-        main_screen_model_class main_screen_model_class2=new main_screen_model_class();
-        main_screen_model_class2.setUsername("prbhtsni");
-        main_screen_model_class2.setFullname("Prabhat Saini");
-        main_screen_model_class2.setLastmessage("Me too is using your app");
-        arrayList.add(main_screen_model_class1);
-        arrayList.add(main_screen_model_class2);
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-//        arrayList.add(new main_screen_model_class("n1","f1","hi",1,2));
-        main_screen_adapter_recyclerview main_screen_adapter_recyclerview=new main_screen_adapter_recyclerview(getContext(),this.arrayList);
-        binding.mainScreenRecycler.setAdapter(main_screen_adapter_recyclerview);
+
+        String gender_key= MainActivity.getInstance().getGender_key();
+
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        db.collection(gender_key).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.d("main_read", "main_read_failed");
+                    return;
+                } else {
+                    arrayList.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        main_screen_model_class main_screen_model_class = new main_screen_model_class();
+                        String username = doc.getString("Username");
+                        String fullname = doc.getString("Fullname");
+                        String post_description = doc.getString("post_description");
+                        String latest_pic = doc.getString("latest_pic");
+                        String profile_image = doc.getString("Profile_image");
+                        String user_description=doc.getString("Description");
+                        main_screen_model_class.setUsername(username);
+                        main_screen_model_class.setFullname(fullname);
+                        main_screen_model_class.setImage_description(post_description);
+                        main_screen_model_class.setUploaded_image(latest_pic);
+                        main_screen_model_class.setProfile_image(profile_image);
+                        main_screen_model_class.setUserid(doc.getId());
+                        main_screen_model_class.setUser_description(user_description);
+                        arrayList.add(main_screen_model_class);
+                    }
+                    main_screen_adapter_recyclerview main_screen_adapter_recyclerview=new main_screen_adapter_recyclerview(getContext(),arrayList);
+                    binding.mainScreenRecycler.setAdapter(main_screen_adapter_recyclerview);
+                }
+            }
+        });
+
 
         instance=this;
         return  view;
@@ -111,14 +131,26 @@ public class main_screen_fragment extends Fragment {
     {
         return instance;
     }
-    public void switch_fragment()
+    public void switch_user_profile_fragment(String userid,String fullname,String profile_pic,String user_description)
     {
+        Bundle bundle=new Bundle();
+        bundle.putString("index_fragment","main_fragment");
+        bundle.putString("index_userid",userid);
+        bundle.putString("index_fullname",fullname);
+        bundle.putString("index_profile_pic",profile_pic);
+        bundle.putString("index_user_description",user_description);
         user_profile_fragment user_profile_fragment=new user_profile_fragment();
         main_screen_holder_fragment.getInstance().main_screen_main_fragment_push();
-        //main_screen_fragment main_screen_fragment=new main_screen_fragment();
+        user_profile_fragment.setArguments(bundle);
         FragmentTransaction transaction= getParentFragmentManager().beginTransaction();
-        //transaction.hide(main_screen_fragment);
-//        transaction.replace(((ViewGroup)(getView().getParent())).getId(),user_profile_fragment).addToBackStack(null).commit();
         transaction.replace(R.id.main_screen_holder,user_profile_fragment).commit();
     }
+    public void switch_chat_detail_fragment()
+    {
+        chat_detail_fragment chat_detail_fragment=new chat_detail_fragment();
+        main_screen_holder_fragment.getInstance().main_screen_main_fragment_push();
+        FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_screen_holder,chat_detail_fragment).commit();
+    }
+
 }

@@ -14,6 +14,7 @@ import com.example.social_media_app.fragments.Search_fragment;
 import com.example.social_media_app.fragments.main_screen_fragment;
 import com.example.social_media_app.fragments.profile_fragment;
 import com.example.social_media_app.fragments.user_profile_fragment;
+import com.example.social_media_app.holder_fragments.likings_screen_holder_fragment;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
 import com.example.social_media_app.holder_fragments.profile_holder_fragment;
 import com.example.social_media_app.holder_fragments.search_screen_holder_fragment;
@@ -37,6 +38,8 @@ public class main_screen_fragments_adapter extends FragmentPagerAdapter {
 //                Log.d("secondview","second page of viewpager");
                 return new search_screen_holder_fragment();
             case 2:
+                return new likings_screen_holder_fragment();
+            case 3:
                 return new profile_holder_fragment();
             default:
                 return new main_screen_holder_fragment();
@@ -46,7 +49,7 @@ public class main_screen_fragments_adapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Nullable
@@ -62,6 +65,9 @@ public class main_screen_fragments_adapter extends FragmentPagerAdapter {
                 title="Search";
                 break;
             case 2:
+                title="Likings";
+                break;
+            case 3:
                 title="Profile";
                 break;
             default:

@@ -40,7 +40,7 @@ public class splash_activity extends AppCompatActivity {
             public void run()
             {
                 try {
-                    sleep(2000);
+                    sleep(1000);
                     auth = FirebaseAuth.getInstance();
                     FirebaseUser user = auth.getCurrentUser();
                     if (user != null) {
@@ -56,7 +56,9 @@ public class splash_activity extends AppCompatActivity {
                                     DocumentSnapshot document= task.getResult();
                                     if(document.exists())
                                     {
+                                        String gender= document.getString("gender");
                                         Intent intent = new Intent(splash_activity.this, MainActivity.class);
+                                        intent.putExtra("gender_key",gender);
                                         startActivity(intent);
                                     }
                                     else
@@ -69,7 +71,9 @@ public class splash_activity extends AppCompatActivity {
                                                     DocumentSnapshot document= task.getResult();
                                                     if(document.exists())
                                                     {
+                                                        String gender= document.getString("gender");
                                                         Intent intent = new Intent(splash_activity.this, MainActivity.class);
+                                                        intent.putExtra("gender_key",gender);
                                                         startActivity(intent);
                                                     }
                                                     else
@@ -105,4 +109,5 @@ public class splash_activity extends AppCompatActivity {
         };
         thread.start();
     }
+
 }

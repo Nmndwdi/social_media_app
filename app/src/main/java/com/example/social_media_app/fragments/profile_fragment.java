@@ -68,6 +68,9 @@ public class profile_fragment extends Fragment {
                     case R.id.story:
                         Toast.makeText(getContext(), "create the story", Toast.LENGTH_SHORT).show();
                         return true;
+                    case R.id.profile_menu:
+                        profile_settings_fragment profile_settings_fragment=new profile_settings_fragment();
+                        profile_settings_fragment.show(getParentFragmentManager(),profile_settings_fragment.getTag());
                     default:
                         return false;
                 }
@@ -102,43 +105,18 @@ public class profile_fragment extends Fragment {
         profile_adapter_recyclerview profile_adapter_recyclerview=new profile_adapter_recyclerview(getContext(),this.arrayList);
         binding.profileRecyclerview.setAdapter(profile_adapter_recyclerview);
 
+        binding.editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profile_holder_fragment.getInstance().profile_screen_profile_fragment_push();
+                edit_profile_fragment edit_profile_fragment=new edit_profile_fragment();
+                FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.profile_holder,edit_profile_fragment).commit();
+            }
+        });
+
         return view;
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(crop_uri==null) {
-//            if (requestCode == pick_image_request && resultCode == RESULT_OK) {
-//                uri = data.getData();
-//                crop_uri=data.getData();
-//                CropImage.activity(uri).start(getContext(), this);
-//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//            } else {
-//                Toast.makeText(getContext(), "Please try again...", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//        else
-//        {
-//            if(requestCode==CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==RESULT_OK)
-//            {
-//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//                crop_uri = result.getUri();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("string_uri", String.valueOf(crop_uri));
-//                profile_holder_fragment.getInstance().profile_screen_profile_fragment_push();
-//                post_fragment post_fragment = new post_fragment();
-//                post_fragment.setArguments(bundle);
-//                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//                transaction.replace(R.id.profile_holder, post_fragment).commit();
-//            }
-//            else
-//            {
-//                Toast.makeText(getContext(), "Error...", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -159,10 +137,6 @@ public class profile_fragment extends Fragment {
 
     public void select_image()
     {
-//        Intent intent=new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(intent,pick_image_request);
         CropImage.activity().start(getContext(),this);
     }
 }

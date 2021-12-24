@@ -20,6 +20,12 @@
                 app:showAsAction="withText" />
         </menu>
     </item>
+    <item android:id="@+id/profile_menu"
+        android:title="settings"
+        android:icon="@drawable/menu"
+        app:showAsAction="always">
+
+    </item>
 
 
 </menu>

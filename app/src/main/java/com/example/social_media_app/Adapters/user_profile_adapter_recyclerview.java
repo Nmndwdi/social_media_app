@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.social_media_app.R;
+import com.example.social_media_app.fragments.user_profile_fragment;
 import com.example.social_media_app.model_classes.user_profile_model_class;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -33,7 +36,8 @@ public class user_profile_adapter_recyclerview extends RecyclerView.Adapter<user
 
     @Override
     public void onBindViewHolder(@NonNull user_profile_viewholder holder, int position) {
-
+        String profile_image=arrayList.get(position).getUser_profile_image();
+        Picasso.get().load(profile_image).into(holder.user_profile_image);
     }
 
     @Override
@@ -47,10 +51,6 @@ public class user_profile_adapter_recyclerview extends RecyclerView.Adapter<user
         public user_profile_viewholder(@NonNull View itemView) {
             super(itemView);
             user_profile_image=(ImageView) itemView.findViewById(R.id.user_profile_image);
-        }
-
-        public ImageView getUser_profile_image() {
-            return user_profile_image;
         }
     }
 }

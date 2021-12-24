@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.social_media_app.R;
 import com.example.social_media_app.databinding.FragmentMainScreenHolderFragmentBinding;
+import com.example.social_media_app.fragments.chat_detail_fragment;
 import com.example.social_media_app.fragments.main_screen_fragment;
 import com.example.social_media_app.fragments.user_profile_fragment;
 
@@ -56,5 +57,10 @@ public class main_screen_holder_fragment extends Fragment {
         Fragment fragment=main_screen_fragment_stack.pop();
         FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.main_screen_holder,fragment).commit();
+    }
+    public void main_screen_user_profile_fragment_push()
+    {
+        user_profile_fragment user_profile_fragment=new user_profile_fragment();
+        main_screen_fragment_stack.push(user_profile_fragment);
     }
 }

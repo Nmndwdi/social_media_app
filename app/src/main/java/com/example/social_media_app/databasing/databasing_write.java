@@ -1,18 +1,15 @@
 package com.example.social_media_app.databasing;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.social_media_app.signing.username_fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirestoreRegistrar;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -23,6 +20,8 @@ public class databasing_write {
     String username,fullname,email,password,gender,userid;
     int age;
 
+    Map<String,Object> map=new HashMap<>();
+
     FirebaseFirestore db;
 
     public databasing_write()
@@ -30,7 +29,13 @@ public class databasing_write {
 
     }
 
-    public databasing_write(String username, String fullname, String email, String password,String gender,int age,String userid) {
+    public databasing_write(Map<String, Object> map,String userid,String gender) {
+        this.map = map;
+        this.userid=userid;
+        this.gender=gender;
+    }
+
+    public databasing_write(String username, String fullname, String email, String password, String gender, int age, String userid) {
         this.username = username;
         this.fullname = fullname;
         this.email = email;
@@ -114,6 +119,15 @@ public class databasing_write {
         user.put("Email",email);
         user.put("Password",password);
         user.put("age",age);
+        user.put("timestamp",System.currentTimeMillis());
+        user.put("Profile_image",null);
+        user.put("Description",null);
+        user.put("Country","Not selected");
+        user.put("State",null);
+        user.put("City",null);
+        user.put("gender",gender);
+        user.put("latest_pic",null);
+        user.put("post_description",null);
         db.collection(gender).document(userid)
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -136,6 +150,15 @@ public class databasing_write {
         user.put("Fullname",fullname);
         user.put("age",age);
         user.put("Email",email);
+        user.put("timestamp",System.currentTimeMillis());
+        user.put("Profile_image",null);
+        user.put("Description",null);
+        user.put("Country","Not selected");
+        user.put("State",null);
+        user.put("City",null);
+        user.put("gender",gender);
+        user.put("latest_pic",null);
+        user.put("post_description",null);
         db.collection(gender).document(userid)
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -150,26 +173,20 @@ public class databasing_write {
         });
     }
 
-
-    public void getdata()
+    public void update_account()
     {
-        FirebaseFirestore db=FirebaseFirestore.getInstance();
-        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db=FirebaseFirestore.getInstance();
+        db.collection(gender).document(userid).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if(task.isSuccessful())
-                {
-                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
-                    {
-                        Log.d("fuk", documentSnapshot.getId() + " => " + documentSnapshot.getData());
-                    }
-                }
-                else
-                {
-                    Log.d("Err","errr");
-                }
+            public void onSuccess(Void unused) {
+                Log.d("success","successfully updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("failure","update failed");
             }
         });
     }
+
 }

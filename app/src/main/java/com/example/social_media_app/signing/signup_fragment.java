@@ -80,6 +80,7 @@ public class signup_fragment extends Fragment {
                                 databasing_write databasing_write=new databasing_write(username,fullname,email,password,gender,age,userid);
                                 databasing_write.create_account();
                                 Intent intent=new Intent(getContext(), MainActivity.class);
+                                intent.putExtra("gender_key",gender);
                                 startActivity(intent);
                             }
                             else

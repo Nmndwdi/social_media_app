@@ -16,14 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.social_media_app.MainActivity;
 import com.example.social_media_app.R;
+import com.example.social_media_app.databasing.firebase_storage;
 import com.example.social_media_app.databinding.FragmentPostFragmentBinding;
 import com.example.social_media_app.holder_fragments.profile_holder_fragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 public class post_fragment extends Fragment {
     FragmentPostFragmentBinding binding;
     Uri uri;
+    FirebaseAuth auth;
     public post_fragment() {
         // Required empty public constructor
     }
@@ -46,6 +50,13 @@ public class post_fragment extends Fragment {
         binding.post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String post_description=binding.postDescription.getText().toString();
+                auth=FirebaseAuth.getInstance();
+                String userid=auth.getUid();
+                String gender= MainActivity.getInstance().getGender();
+                firebase_storage firebase_storage=new firebase_storage(String.valueOf(uri),userid,post_description,gender);
+                firebase_storage.latest_pic();
+                firebase_storage.post_image();
                 profile_holder_fragment.getInstance().profile_screen_pop();
                 }
         });
@@ -68,10 +79,6 @@ public class post_fragment extends Fragment {
         else
         {
             Toast.makeText(getContext(), "Please try again...", Toast.LENGTH_SHORT).show();
-            profile_holder_fragment.getInstance().profile_screen_pop();
-            profile_fragment profile_fragment=new profile_fragment();
-            FragmentTransaction transaction=getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.profile_holder,profile_fragment).commit();
         }
     }
     public void reselect_image()

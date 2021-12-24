@@ -47,7 +47,7 @@ public class search_screen_adapter_recyclerview extends RecyclerView.Adapter<sea
         holder.search_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Search_fragment.getInstance().switch_fragment();
+                Search_fragment.getInstance().switch_user_profile_fragment();
             }
         });
     }

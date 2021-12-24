@@ -1,16 +1,21 @@
 package com.example.social_media_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.example.social_media_app.Adapters.main_screen_fragments_adapter;
 import com.example.social_media_app.animationss.DepthPageTransformer;
 import com.example.social_media_app.databasing.databasing_write;
 import com.example.social_media_app.databinding.ActivityMainBinding;
+import com.example.social_media_app.fragments.chat_detail_fragment;
+import com.example.social_media_app.fragments.chats_fragment;
+import com.example.social_media_app.holder_fragments.likings_screen_holder_fragment;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
 import com.example.social_media_app.holder_fragments.profile_holder_fragment;
 import com.example.social_media_app.holder_fragments.search_screen_holder_fragment;
@@ -24,110 +29,48 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     int backButtonCount=0;
-    //private static MainActivity instance;
+    private static String gender_key;
+    private static String gender;
+
+    private static MainActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        main_screen_fragment main_screen_fragment=new main_screen_fragment();
-//        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.linear,main_screen_fragment);
-//        transaction.commit();
-//        Toolbar toolbar=(Toolbar) findViewById(R.id.main_screen_toolbar);
-//        setSupportActionBar(toolbar);
-        
+
         viewPager=findViewById(R.id.main_screen_viewpager);
         viewPager.setAdapter(new main_screen_fragments_adapter(getSupportFragmentManager()));
         tabLayout=findViewById(R.id.main_screen_tabs);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setPageTransformer(false,new DepthPageTransformer());
-        //instance=this;
-        viewPager.setOffscreenPageLimit(2);
-
-        databasing_write databasing=new databasing_write();
-        databasing.getdata();
-
-
-//        binding.delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                user=FirebaseAuth.getInstance().getCurrentUser();
-//                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if(task.isSuccessful())
-//                        {
-//                            Toast.makeText(MainActivity.this, "user deleted successfully", Toast.LENGTH_SHORT).show();
-//                            Intent intent=new Intent(MainActivity.this, signup_activity.class);
-//                            startActivity(intent);
-//                        }
-//                        else
-//                        {
-//                            Toast.makeText(MainActivity.this, "Error,user cant be deleted", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//        binding.signout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseAuth.getInstance().signOut();
-//                Intent intent=new Intent(MainActivity.this, signup_activity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        binding.messageSent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String message=binding.message.getText().toString();
-//                databasing databasing=new databasing();
-//                databasing.addmessage(message);
-//            }
-//        });
-
+        instance=this;
+        viewPager.setOffscreenPageLimit(3);
+        gender=getIntent().getStringExtra("gender_key");
+        if(gender.equals("Boys"))
+        {
+            gender_key="Girls";
+        }
+        else if(gender.equals("Girls"))
+        {
+            gender_key="Boys";
+        }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_screen_menu,menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId())
-//        {
-//            case R.id.post:
-//                Toast.makeText(this, "add a post", Toast.LENGTH_SHORT).show();
-//                break;
-//            case R.id.story:
-//                Toast.makeText(this, "add a story", Toast.LENGTH_SHORT).show();
-//                break;
-//            case R.id.chats:
-//                Toast.makeText(this, "Recent Chats", Toast.LENGTH_SHORT).show();
-//                break;
-//            default:
-//                break;
-//        }
-//        return true;
-//    }
+    public String getGender_key()
+    {
+        return gender_key;
+    }
 
-//    public static MainActivity getInstance()
-//    {
-//        return instance;
-//    }
-////
-//    public void switch_fragment(){
-//        user_profile_fragment user_profile_fragment=new user_profile_fragment();
-//        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.linearrrrrr,user_profile_fragment)
-//                .addToBackStack(null)
-//                .commitNow();
-//    }
+    public String getGender()
+    {
+        return gender;
+    }
 
+    public static MainActivity getInstance()
+    {
+        return instance;
+    }
 
     @Override
     public void onBackPressed() {
@@ -185,9 +128,22 @@ public class MainActivity extends AppCompatActivity {
         else if(viewPager.getCurrentItem()==2)
         {
             backButtonCount=0;
+            int size= likings_screen_holder_fragment.getInstance().likings_fragment_stack_size();
+            if(size==0)
+            {
+                viewPager.setCurrentItem(1,true);
+            }
+            else
+            {
+                likings_screen_holder_fragment.getInstance().likings_screen_pop();
+            }
+        }
+        else if(viewPager.getCurrentItem()==3)
+        {
+            backButtonCount=0;
             int size= profile_holder_fragment.getInstance().profile_screen_stack_size();
             if(size==0) {
-                viewPager.setCurrentItem(1, true);
+                viewPager.setCurrentItem(2, true);
             }
             else
             {
@@ -195,4 +151,39 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(event.getAction()==MotionEvent.ACTION_UP)
+        {
+            chats_fragment chats_fragment=new chats_fragment();
+            chats_fragment.show(getSupportFragmentManager(),chats_fragment.getTag());
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void switch_chat_detail_fragment()
+    {
+        chat_detail_fragment chat_detail_fragment=new chat_detail_fragment();
+        search_screen_holder_fragment.getInstance().search_screen_user_profile_fragment_push();
+        FragmentTransaction transaction= getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.search_screen_holder,chat_detail_fragment).commit();
+    }
+
+    public void switch_user_chat_fragment()
+    {
+        chat_detail_fragment chat_detail_fragment=new chat_detail_fragment();
+        main_screen_holder_fragment.getInstance().main_screen_user_profile_fragment_push();
+        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_screen_holder,chat_detail_fragment).commit();
+    }
+
+    public void switch_liking_chat_fragment()
+    {
+        chat_detail_fragment chat_detail_fragment=new chat_detail_fragment();
+        likings_screen_holder_fragment.getInstance().likings_screen_user_profile_push();
+        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.likings_screen_holder,chat_detail_fragment).commit();
+    }
+
 }
