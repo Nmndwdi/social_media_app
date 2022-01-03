@@ -5,6 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.social_media_app.fragments.edit_profile_fragment;
+import com.example.social_media_app.fragments.post_fragment;
+import com.example.social_media_app.holder_fragments.profile_holder_fragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -99,6 +102,8 @@ public class firebase_storage {
                                     db.collection(gender).document(userid).update(map1).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
+//                                            profile_holder_fragment.getInstance().profile_screen_pop();
+//                                            post_fragment.getInstance().cancel_progress_dialog();
                                             Log.d("success","success");
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -150,6 +155,8 @@ public class firebase_storage {
                             db.collection("images").document("posts").collection(userid).document(System.currentTimeMillis()+".").set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
+                                    profile_holder_fragment.getInstance().profile_screen_pop();
+                                    post_fragment.getInstance().cancel_progress_dialog();
                                     Log.d("success","successfully uploaded post to firestore");
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -200,11 +207,15 @@ public class firebase_storage {
                                     db.collection(gender).document(userid).update(map1).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
+                                            profile_holder_fragment.getInstance().profile_screen_pop();
+                                            edit_profile_fragment.getInstance().cancel_progress_dialog();
                                             Log.d("success","success");
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
+//                                            profile_holder_fragment.getInstance().profile_screen_pop();
+//                                            edit_profile_fragment.getInstance().cancel_progress_dialog();
                                             Log.d("fail","failed");
                                         }
                                     });
@@ -212,6 +223,8 @@ public class firebase_storage {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+//                                    profile_holder_fragment.getInstance().profile_screen_pop();
+//                                    edit_profile_fragment.getInstance().cancel_progress_dialog();
                                     Log.d("firestore_upimg","image cant be uploaded to firebase");
                                 }
                             });
@@ -219,6 +232,8 @@ public class firebase_storage {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+//                            profile_holder_fragment.getInstance().profile_screen_pop();
+//                            edit_profile_fragment.getInstance().cancel_progress_dialog();
                             Log.d("fail_download_url","url download failed");
                         }
                     });
@@ -226,6 +241,8 @@ public class firebase_storage {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+//                    profile_holder_fragment.getInstance().profile_screen_pop();
+//                    edit_profile_fragment.getInstance().cancel_progress_dialog();
                     Log.d("fireuperr","image_upload_unsuccessful");
                 }
             });

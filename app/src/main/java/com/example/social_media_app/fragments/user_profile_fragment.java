@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.social_media_app.Adapters.search_screen_adapter_recyclerview;
 import com.example.social_media_app.Adapters.user_profile_adapter_recyclerview;
 import com.example.social_media_app.MainActivity;
@@ -55,7 +56,8 @@ public class user_profile_fragment extends Fragment {
         String index_profile_pic=getArguments().getString("index_profile_pic");
         String index_user_description=getArguments().getString("index_user_description");
 
-        Picasso.get().load(index_profile_pic).into(binding.userProfileImage);
+//        Picasso.get().load(index_profile_pic).into(binding.userProfileImage);
+        Glide.with(getContext()).load(index_profile_pic).into(binding.userProfileImage);
         binding.userProfileFullname.setText(index_fullname);
         binding.userProfileDescription.setText(index_user_description);
 

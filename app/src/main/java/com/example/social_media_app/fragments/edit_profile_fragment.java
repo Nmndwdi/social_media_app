@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.social_media_app.MainActivity;
+import com.example.social_media_app.animationss.custom_progress_dialog;
 import com.example.social_media_app.databasing.databasing_write;
 import com.example.social_media_app.databasing.firebase_storage;
 import com.example.social_media_app.databinding.FragmentEditProfileFragmentBinding;
@@ -35,6 +36,10 @@ public class edit_profile_fragment extends Fragment {
     Map<String,Object>map=new HashMap<>();
     FirebaseAuth auth;
     String userid;
+
+    private static edit_profile_fragment instance;
+
+    custom_progress_dialog custom_progress_dialog;
 
     public edit_profile_fragment() {
         // Required empty public constructor
@@ -58,9 +63,13 @@ public class edit_profile_fragment extends Fragment {
                 map.put("Country",binding.ccp.getSelectedCountryName());
             }
         });
+
+        custom_progress_dialog=new custom_progress_dialog(getContext());
+
         binding.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 auth=FirebaseAuth.getInstance();
                 userid=auth.getUid();
                 if(binding.editName.getText().toString().trim().length()!=0)
@@ -84,16 +93,17 @@ public class edit_profile_fragment extends Fragment {
                     map.put("City",binding.editCity.getText().toString());
                 }
                 if(!map.isEmpty()) {
+                    custom_progress_dialog.show();
                     String gender=MainActivity.getInstance().getGender();
                     databasing_write databasing_write = new databasing_write(map,userid,gender);
                     databasing_write.update_account();
                 }
                 if(image_uri!=null) {
+                    custom_progress_dialog.show();
                     String gender= MainActivity.getInstance().getGender();
                     firebase_storage firebase_storage = new firebase_storage(String.valueOf(image_uri), userid,gender);
                     firebase_storage.profile_picture();
                 }
-                profile_holder_fragment.getInstance().profile_screen_pop();
             }
         });
         binding.pickImage.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +112,18 @@ public class edit_profile_fragment extends Fragment {
                 pickimage();
             }
         });
+
+        instance=this;
         return view;
+    }
+
+    public static edit_profile_fragment getInstance(){
+        return instance;
+    }
+
+    public void cancel_progress_dialog()
+    {
+        custom_progress_dialog.dismiss();
     }
 
     @Override

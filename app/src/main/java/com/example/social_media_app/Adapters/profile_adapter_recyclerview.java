@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.social_media_app.R;
 import com.example.social_media_app.model_classes.profile_model_class;
 import com.squareup.picasso.Picasso;
@@ -35,7 +36,8 @@ public class profile_adapter_recyclerview extends RecyclerView.Adapter<profile_a
     @Override
     public void onBindViewHolder(@NonNull profile_viewholder holder, int position) {
         String profile_image=arrayList.get(position).getProfile_image();
-        Picasso.get().load(profile_image).into(holder.profile_image);
+//        Picasso.get().load(profile_image).into(holder.profile_image);
+        Glide.with(context).load(profile_image).into(holder.profile_image);
     }
 
     @Override

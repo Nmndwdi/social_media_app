@@ -7,10 +7,12 @@
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/drawable/account.xml" value="0.2703125" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/drawable/add_main_screen.xml" value="0.2703125" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/drawable/chat_background.xml" value="0.2703125" />
-        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/drawable/save.xml" value="0.2703125" />
+        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/drawable/saved.xml" value="0.2703125" />
+        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/activity_signup.xml" value="0.161231884057971" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/activity_splash.xml" value="0.1322463768115942" />
-        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/chat_screen.xml" value="0.182518115942029" />
+        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/chat_screen.xml" value="0.536" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/custom_toolbar_main_screen.xml" value="0.4" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/fragment_chat_detail_fragment.xml" value="0.2" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/fragment_chats_fragment.xml" value="0.182518115942029" />
@@ -39,6 +41,7 @@
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/message_receiver.xml" value="0.4" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/message_sender.xml" value="0.264" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/profile_screen.xml" value="0.192481884057971" />
+        <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/progress_dialog.xml" value="0.2" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/search_screen.xml" value="0.1875" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/search_screen_toolbar.xml" value="0.19927536231884058" />
         <entry key="..\:/Users/naman/AndroidStudioProjects/social_media_app2/app/src/main/res/layout/user_profile_screen.xml" value="0.16304347826086957" />

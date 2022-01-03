@@ -182,8 +182,10 @@ public class username_fragment extends Fragment {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
+                                            String gender=document.getString("gender");
                                             Toast.makeText(getContext(), "Login_success", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getContext(), MainActivity.class);
+                                            intent.putExtra("gender_key",gender);
                                             startActivity(intent);
                                         } else {
                                             documentReference1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -192,8 +194,10 @@ public class username_fragment extends Fragment {
                                                     if (task.isSuccessful()) {
                                                         DocumentSnapshot document = task.getResult();
                                                         if (document.exists()) {
+                                                            String gender=document.getString("gender");
                                                             Toast.makeText(getContext(), "Login_success", Toast.LENGTH_SHORT).show();
                                                             Intent intent = new Intent(getContext(), MainActivity.class);
+                                                            intent.putExtra("gender_key",gender);
                                                             startActivity(intent);
                                                         } else {
                                                             // Sign in success, update UI with the signed-in user's information

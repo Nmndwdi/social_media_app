@@ -78,7 +78,6 @@
                 android:elevation="2dp"
                 app:layout_constrainedWidth="true"
                 app:layout_constrainedHeight="true"
-                android:scaleType="centerCrop"
                 android:src="@drawable/avengers"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +119,7 @@
                     app:srcCompat="@drawable/chat" />
 
                 <ImageView
-                    android:id="@+id/imageView8"
+                    android:id="@+id/save_main_screen"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="5dp"

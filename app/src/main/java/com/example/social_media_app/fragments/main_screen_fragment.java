@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.social_media_app.Adapters.main_screen_adapter_recyclerview;
 import com.example.social_media_app.MainActivity;
 import com.example.social_media_app.R;
+import com.example.social_media_app.animationss.custom_progress_dialog;
 import com.example.social_media_app.databasing.databasing_read;
 import com.example.social_media_app.databinding.FragmentMainScreenFragmentBinding;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
@@ -92,6 +93,7 @@ public class main_screen_fragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
         db.collection(gender_key).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -131,6 +133,7 @@ public class main_screen_fragment extends Fragment {
     {
         return instance;
     }
+
     public void switch_user_profile_fragment(String userid,String fullname,String profile_pic,String user_description)
     {
         Bundle bundle=new Bundle();

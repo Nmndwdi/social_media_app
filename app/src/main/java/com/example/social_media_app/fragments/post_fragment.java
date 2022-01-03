@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.social_media_app.MainActivity;
 import com.example.social_media_app.R;
+import com.example.social_media_app.animationss.custom_progress_dialog;
 import com.example.social_media_app.databasing.firebase_storage;
 import com.example.social_media_app.databinding.FragmentPostFragmentBinding;
 import com.example.social_media_app.holder_fragments.profile_holder_fragment;
@@ -28,6 +29,8 @@ public class post_fragment extends Fragment {
     FragmentPostFragmentBinding binding;
     Uri uri;
     FirebaseAuth auth;
+    private static post_fragment instance;
+    custom_progress_dialog custom_progress_dialog;
     public post_fragment() {
         // Required empty public constructor
     }
@@ -47,9 +50,11 @@ public class post_fragment extends Fragment {
                 profile_holder_fragment.getInstance().profile_screen_pop();
             }
         });
+        custom_progress_dialog=new custom_progress_dialog(getContext());
         binding.post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                custom_progress_dialog.show();
                 String post_description=binding.postDescription.getText().toString();
                 auth=FirebaseAuth.getInstance();
                 String userid=auth.getUid();
@@ -57,7 +62,6 @@ public class post_fragment extends Fragment {
                 firebase_storage firebase_storage=new firebase_storage(String.valueOf(uri),userid,post_description,gender);
                 firebase_storage.latest_pic();
                 firebase_storage.post_image();
-                profile_holder_fragment.getInstance().profile_screen_pop();
                 }
         });
         binding.reselect.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +70,20 @@ public class post_fragment extends Fragment {
                 reselect_image();
             }
         });
+
+        instance=this;
         return view;
     }
+
+    public static post_fragment getInstance(){
+        return instance;
+    }
+
+    public void cancel_progress_dialog()
+    {
+        custom_progress_dialog.dismiss();
+    }
+
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==RESULT_OK)

@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.social_media_app.Adapters.profile_adapter_recyclerview;
 import com.example.social_media_app.Adapters.user_profile_adapter_recyclerview;
 import com.example.social_media_app.MainActivity;
@@ -110,7 +111,7 @@ public class profile_fragment extends Fragment {
 
         String userid=auth.getCurrentUser().getUid();
 
-        db.collection(gender).document(userid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            db.collection(gender).document(userid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
                 if(e!=null)
@@ -120,6 +121,9 @@ public class profile_fragment extends Fragment {
                 }
                 else
                 {
+                    if(getActivity()==null) {
+                        return;
+                    }
                     if(snapshot!=null && snapshot.exists())
                     {
                         String username=snapshot.getString("Username");
@@ -128,7 +132,8 @@ public class profile_fragment extends Fragment {
                         String profile_pic=snapshot.getString("Profile_image");
                         binding.profileFullname.setText(fullname);
                         binding.profileDescription.setText(description);
-                        Picasso.get().load(profile_pic).into(binding.profileImage);
+//                        Picasso.get().load(profile_pic).into(binding.profileImage);
+                        Glide.with(getContext()).load(profile_pic).into(binding.profileImage);
                     }
                     else
                     {
@@ -147,6 +152,10 @@ public class profile_fragment extends Fragment {
                 }
                 else
                 {
+                    if(getActivity()==null)
+                    {
+                        return;
+                    }
                     arrayList.clear();
                     for(QueryDocumentSnapshot doc:value)
                     {

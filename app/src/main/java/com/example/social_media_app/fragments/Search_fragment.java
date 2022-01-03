@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.social_media_app.Adapters.search_screen_adapter_recyclerview;
 import com.example.social_media_app.R;
@@ -43,7 +41,7 @@ public class Search_fragment extends Fragment {
         arrayList.add(new search_screen_model_class(R.drawable.google));
         arrayList.add(new search_screen_model_class(R.drawable.facebook));
         arrayList.add(new search_screen_model_class(R.drawable.chat));
-        arrayList.add(new search_screen_model_class(R.drawable.save));
+        arrayList.add(new search_screen_model_class(R.drawable.saved));
         search_screen_adapter_recyclerview search_screen_adapter_recyclerview=new search_screen_adapter_recyclerview(getContext(),this.arrayList);
         binding.searchScreenRecyclerView.setAdapter(search_screen_adapter_recyclerview);
         instance=this;

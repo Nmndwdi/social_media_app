@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.social_media_app.R;
 import com.example.social_media_app.fragments.user_profile_fragment;
 import com.example.social_media_app.model_classes.user_profile_model_class;
@@ -37,7 +38,8 @@ public class user_profile_adapter_recyclerview extends RecyclerView.Adapter<user
     @Override
     public void onBindViewHolder(@NonNull user_profile_viewholder holder, int position) {
         String profile_image=arrayList.get(position).getUser_profile_image();
-        Picasso.get().load(profile_image).into(holder.user_profile_image);
+//        Picasso.get().load(profile_image).into(holder.user_profile_image);
+        Glide.with(context).load(profile_image).into(holder.user_profile_image);
     }
 
     @Override

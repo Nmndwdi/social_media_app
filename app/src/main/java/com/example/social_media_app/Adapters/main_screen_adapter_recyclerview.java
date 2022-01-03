@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.social_media_app.R;
 import com.example.social_media_app.fragments.main_screen_fragment;
 import com.example.social_media_app.model_classes.main_screen_model_class;
@@ -36,7 +37,6 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
 
     @Override
     public void onBindViewHolder(@NonNull main_screen_viewholder holder, int position) {
-        Picasso.get().load(arrayList.get(position).getUploaded_image()).into(holder.uploaded_image);
         holder.image_description.setText(arrayList.get(position).getImage_description());
         String userid = arrayList.get(position).getUserid();
         String username = arrayList.get(position).getUsername();
@@ -45,8 +45,10 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
         String user_description = arrayList.get(position).getUser_description();
         holder.username.setText(username);
         holder.fullname.setText(fullname);
-        Picasso.get().load(profile_pic).into(holder.profile_image);
-
+//        Picasso.get().load(profile_pic).into(holder.profile_image);
+//        Picasso.get().load(arrayList.get(position).getUploaded_image()).into(holder.uploaded_image);
+        Glide.with(context).load(arrayList.get(position).getUploaded_image()).into(holder.uploaded_image);
+        Glide.with(context).load(profile_pic).into(holder.profile_image);
 
         holder.username.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +68,14 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
                 main_screen_fragment.getInstance().switch_chat_detail_fragment();
             }
         });
+
+        holder.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     @Override
@@ -76,7 +86,7 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
 
     public class main_screen_viewholder extends RecyclerView.ViewHolder {
         TextView username, fullname, lastmessage, image_description;
-        ImageView profile_image, uploaded_image, message;
+        ImageView profile_image, uploaded_image, message,save;
 
         public main_screen_viewholder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +97,7 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
             uploaded_image = (ImageView) itemView.findViewById(R.id.uploaded_image);
             message = (ImageView) itemView.findViewById(R.id.message_main_screen);
             image_description = (TextView) itemView.findViewById(R.id.image_description);
+            save=(ImageView) itemView.findViewById(R.id.save_main_screen);
         }
     }
 }
