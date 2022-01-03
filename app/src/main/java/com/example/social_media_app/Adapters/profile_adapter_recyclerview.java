@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.social_media_app.R;
 import com.example.social_media_app.model_classes.profile_model_class;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,8 @@ public class profile_adapter_recyclerview extends RecyclerView.Adapter<profile_a
 
     @Override
     public void onBindViewHolder(@NonNull profile_viewholder holder, int position) {
-
+        String profile_image=arrayList.get(position).getProfile_image();
+        Picasso.get().load(profile_image).into(holder.profile_image);
     }
 
     @Override

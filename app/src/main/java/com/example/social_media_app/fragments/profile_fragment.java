@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,11 +26,20 @@ import android.widget.Toast;
 
 import com.example.social_media_app.Adapters.profile_adapter_recyclerview;
 import com.example.social_media_app.Adapters.user_profile_adapter_recyclerview;
+import com.example.social_media_app.MainActivity;
 import com.example.social_media_app.R;
 import com.example.social_media_app.databinding.FragmentProfileFragmentBinding;
 import com.example.social_media_app.holder_fragments.profile_holder_fragment;
 import com.example.social_media_app.model_classes.profile_model_class;
 import com.example.social_media_app.model_classes.user_profile_model_class;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
@@ -39,6 +49,10 @@ public class profile_fragment extends Fragment {
     FragmentProfileFragmentBinding binding;
     ArrayList<profile_model_class> arrayList=new ArrayList<>();
     Uri crop_uri=null;
+
+    FirebaseAuth auth;
+    FirebaseFirestore db;
+
     public profile_fragment() {
         // Required empty public constructor
     }
@@ -88,22 +102,64 @@ public class profile_fragment extends Fragment {
         binding.profileToolbar.inflateMenu(R.menu.profile_screen_menu);
 
         binding.profileRecyclerview.setLayoutManager(new GridLayoutManager(getContext(),2));
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        arrayList.add(new profile_model_class());
-        profile_adapter_recyclerview profile_adapter_recyclerview=new profile_adapter_recyclerview(getContext(),this.arrayList);
-        binding.profileRecyclerview.setAdapter(profile_adapter_recyclerview);
+
+        auth=FirebaseAuth.getInstance();
+        db=FirebaseFirestore.getInstance();
+
+        String gender= MainActivity.getInstance().getGender();
+
+        String userid=auth.getCurrentUser().getUid();
+
+        db.collection(gender).document(userid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null)
+                {
+                    Log.d("profile_read","profile_read_failed");
+                    return;
+                }
+                else
+                {
+                    if(snapshot!=null && snapshot.exists())
+                    {
+                        String username=snapshot.getString("Username");
+                        String fullname=snapshot.getString("Fullname");
+                        String description=snapshot.getString("Description");
+                        String profile_pic=snapshot.getString("Profile_image");
+                        binding.profileFullname.setText(fullname);
+                        binding.profileDescription.setText(description);
+                        Picasso.get().load(profile_pic).into(binding.profileImage);
+                    }
+                    else
+                    {
+                        Log.d("profile_read","current_data_null");
+                    }
+                }
+            }
+        });
+
+        db.collection("images").document("posts").collection(userid).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if(e!=null)
+                {
+                    Log.d("profile_images_read","profile_images_read_failed");
+                }
+                else
+                {
+                    arrayList.clear();
+                    for(QueryDocumentSnapshot doc:value)
+                    {
+                        profile_model_class profile_model_class=new profile_model_class();
+                        String profile_image=doc.getString("post");
+                        profile_model_class.setProfile_image(profile_image);
+                        arrayList.add(profile_model_class);
+                    }
+                    profile_adapter_recyclerview profile_adapter_recyclerview=new profile_adapter_recyclerview(getContext(),arrayList);
+                    binding.profileRecyclerview.setAdapter(profile_adapter_recyclerview);
+                }
+            }
+        });
 
         binding.editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
