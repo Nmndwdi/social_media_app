@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class databasing_write {
-    String username, fullname, email, password, gender, userid, save_userid;
+    String username, fullname, email, password, gender, userid, save_userid,profile_pic,last_pic,user_description;
     int age;
 
     Map<String, Object> map = new HashMap<>();
@@ -31,10 +31,15 @@ public class databasing_write {
 
     }
 
-    public databasing_write(String userid, String save_userid,String gender) {
+    public databasing_write(String userid, String save_userid,String gender,String username,String fullname,String profile_pic,String last_pic,String user_description) {
         this.userid = userid;
         this.save_userid = save_userid;
         this.gender=gender;
+        this.username=username;
+        this.fullname=fullname;
+        this.profile_pic=profile_pic;
+        this.last_pic=last_pic;
+        this.user_description=user_description;
     }
 
     public databasing_write(Map<String, Object> map, String userid, String gender) {
@@ -187,13 +192,15 @@ public class databasing_write {
         });
     }
 
-    public void update_account() {
+    public void update_account(String image) {
         db = FirebaseFirestore.getInstance();
         db.collection(gender).document(userid).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                profile_holder_fragment.getInstance().profile_screen_pop();
-                edit_profile_fragment.getInstance().cancel_progress_dialog();
+                if(image==null) {
+                    profile_holder_fragment.getInstance().profile_screen_pop();
+                    edit_profile_fragment.getInstance().cancel_progress_dialog();
+                }
                 Log.d("success", "successfully updated");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -212,13 +219,18 @@ public class databasing_write {
             Map<String, Object> map = new HashMap<>();
             Map<String, Object> map1 = new HashMap<>();
             map.put("saved", save_userid);
+            map.put("username",username);
+            map.put("fullname",fullname);
+            map.put("profile_pic",profile_pic);
+            map.put("last_pic",last_pic);
+            map.put("user_description",user_description);
             map.put("save_time", System.currentTimeMillis());
             map1.put(userid + save_userid, true);
             db.collection("likings").document("saved_profiles").collection(userid).document(save_userid).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
                     Log.d("likings_success", "success");
-                    db.collection(gender).document(userid).set(map1, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    db.collection(gender).document(save_userid).set(map1, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Log.d("success","success");
@@ -239,7 +251,31 @@ public class databasing_write {
         }
         else
         {
-
+            db=FirebaseFirestore.getInstance();
+            db.collection("likings").document("saved_profiles").collection(userid).document(save_userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Log.d("success","successfullly_deleted");
+                    Map<String, Object> map1 = new HashMap<>();
+                    map1.put(userid + save_userid, false);
+                    db.collection(gender).document(save_userid).set(map1,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("success","success");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("failure","failure");
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("failure","cannot delete the saved_profile");
+                }
+            });
         }
     }
 

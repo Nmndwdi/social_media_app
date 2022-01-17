@@ -104,6 +104,13 @@ public class main_screen_fragment extends Fragment {
                     arrayList.clear();
                     for (QueryDocumentSnapshot doc : value) {
                         main_screen_model_class main_screen_model_class = new main_screen_model_class();
+                        Boolean saved_profile=false;
+                        if(doc.contains(auth.getCurrentUser().getUid()+doc.getId()))
+                        {
+                            if(doc.getBoolean(auth.getCurrentUser().getUid()+doc.getId())) {
+                                saved_profile = true;
+                            }
+                        }
                         String username = doc.getString("Username");
                         String fullname = doc.getString("Fullname");
                         String post_description = doc.getString("post_description");
@@ -117,6 +124,7 @@ public class main_screen_fragment extends Fragment {
                         main_screen_model_class.setProfile_image(profile_image);
                         main_screen_model_class.setUserid(doc.getId());
                         main_screen_model_class.setUser_description(user_description);
+                        main_screen_model_class.setSaved_profile(saved_profile);
                         arrayList.add(main_screen_model_class);
                     }
                     main_screen_adapter_recyclerview main_screen_adapter_recyclerview=new main_screen_adapter_recyclerview(getContext(),arrayList);

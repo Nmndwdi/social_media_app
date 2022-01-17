@@ -96,7 +96,7 @@ public class edit_profile_fragment extends Fragment {
                     custom_progress_dialog.show();
                     String gender=MainActivity.getInstance().getGender();
                     databasing_write databasing_write = new databasing_write(map,userid,gender);
-                    databasing_write.update_account();
+                    databasing_write.update_account(String.valueOf(image_uri));
                 }
                 if(image_uri!=null) {
                     custom_progress_dialog.show();

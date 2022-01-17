@@ -66,15 +66,14 @@
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView9"
-                                app:layout_constraintStart_toStartOf="@+id/textView9"
+                                app:layout_constraintEnd_toEndOf="@+id/user_profile_number_posts"
+                                app:layout_constraintStart_toStartOf="@+id/user_profile_number_posts"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/textView9"
+                                android:id="@+id/user_profile_number_posts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="40"
                                 android:textColor="@color/black"
                                 android:textSize="20sp"
                                 android:textStyle="bold"

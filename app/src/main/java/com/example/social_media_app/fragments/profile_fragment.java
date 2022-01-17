@@ -166,6 +166,7 @@ public class profile_fragment extends Fragment {
                     }
                     profile_adapter_recyclerview profile_adapter_recyclerview=new profile_adapter_recyclerview(getContext(),arrayList);
                     binding.profileRecyclerview.setAdapter(profile_adapter_recyclerview);
+                    binding.profileNumberPosts.setText(Integer.toString(arrayList.size()));
                 }
             }
         });

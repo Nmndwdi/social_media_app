@@ -86,6 +86,7 @@ public class user_profile_fragment extends Fragment {
                     }
                     user_profile_adapter_recyclerview user_profile_adapter_recyclerview=new user_profile_adapter_recyclerview(getContext(),arrayList);
                     binding.userProfileRecyclerview.setAdapter(user_profile_adapter_recyclerview);
+                    binding.userProfileNumberPosts.setText(Integer.toString(arrayList.size()));
                 }
             }
         });

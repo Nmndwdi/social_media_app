@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.social_media_app.R;
 import com.example.social_media_app.fragments.likings_fragment;
 import com.example.social_media_app.model_classes.likings_vertical_model_class;
@@ -37,10 +38,19 @@ public class likings_vertical_adapter_recyclerview extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull likings_vertical_viewholder holder, int position) {
 
+        String fullname =arrayList.get(position).getFullname();
+        String userid=arrayList.get(position).getUserid();
+        String username=arrayList.get(position).getUsername();
+        String user_description=arrayList.get(position).getUser_description();
+        holder.fullname.setText(fullname);
+        holder.username.setText(username);
+        String profile_pic=arrayList.get(position).getProfile_pic();
+        Glide.with(context).load(profile_pic).into(holder.image);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                likings_fragment.getInstance().switch_fragment();
+                likings_fragment.getInstance().switch_fragment(userid,fullname,user_description,profile_pic);
             }
         });
 

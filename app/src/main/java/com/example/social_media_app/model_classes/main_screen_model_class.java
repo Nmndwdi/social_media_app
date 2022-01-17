@@ -2,18 +2,27 @@ package com.example.social_media_app.model_classes;
 
 public class main_screen_model_class {
     String username,fullname,lastmessage,image_description,profile_image,uploaded_image,userid,user_description;
-
+    Boolean saved_profile;
     public main_screen_model_class()
     {
 
     }
 
-    public main_screen_model_class(String username, String fullname, String lastmessage, String profile_image, String uploaded_image) {
+    public main_screen_model_class(String username, String fullname, String lastmessage, String profile_image, String uploaded_image,Boolean saved_profile) {
         this.username = username;
         this.fullname = fullname;
         this.lastmessage = lastmessage;
         this.profile_image = profile_image;
         this.uploaded_image = uploaded_image;
+        this.saved_profile=saved_profile;
+    }
+
+    public Boolean getSaved_profile() {
+        return saved_profile;
+    }
+
+    public void setSaved_profile(Boolean saved_profile) {
+        this.saved_profile = saved_profile;
     }
 
     public String getUser_description() {

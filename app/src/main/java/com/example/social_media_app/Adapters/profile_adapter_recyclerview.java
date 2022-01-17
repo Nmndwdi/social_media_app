@@ -1,10 +1,12 @@
 package com.example.social_media_app.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +40,7 @@ public class profile_adapter_recyclerview extends RecyclerView.Adapter<profile_a
         String profile_image=arrayList.get(position).getProfile_image();
 //        Picasso.get().load(profile_image).into(holder.profile_image);
         Glide.with(context).load(profile_image).into(holder.profile_image);
+
     }
 
     @Override
@@ -55,5 +58,6 @@ public class profile_adapter_recyclerview extends RecyclerView.Adapter<profile_a
         public ImageView getProfile_image() {
             return profile_image;
         }
+
     }
 }

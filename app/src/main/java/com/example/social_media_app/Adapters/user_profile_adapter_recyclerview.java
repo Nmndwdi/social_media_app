@@ -40,6 +40,7 @@ public class user_profile_adapter_recyclerview extends RecyclerView.Adapter<user
         String profile_image=arrayList.get(position).getUser_profile_image();
 //        Picasso.get().load(profile_image).into(holder.user_profile_image);
         Glide.with(context).load(profile_image).into(holder.user_profile_image);
+
     }
 
     @Override
