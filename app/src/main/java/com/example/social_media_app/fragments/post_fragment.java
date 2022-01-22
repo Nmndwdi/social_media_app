@@ -57,11 +57,10 @@ public class post_fragment extends Fragment {
                 custom_progress_dialog.show();
                 String post_description=binding.postDescription.getText().toString();
                 auth=FirebaseAuth.getInstance();
-                String userid=auth.getUid();
+                String userid=auth.getCurrentUser().getUid();
                 String gender= MainActivity.getInstance().getGender();
                 firebase_storage firebase_storage=new firebase_storage(String.valueOf(uri),userid,post_description,gender);
-                firebase_storage.latest_pic();
-                firebase_storage.post_image();
+                firebase_storage.create_post();
                 }
         });
         binding.reselect.setOnClickListener(new View.OnClickListener() {

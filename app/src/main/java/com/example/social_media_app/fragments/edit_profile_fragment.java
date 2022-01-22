@@ -57,12 +57,6 @@ public class edit_profile_fragment extends Fragment {
                 profile_holder_fragment.getInstance().profile_screen_pop();
             }
         });
-        binding.ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
-            @Override
-            public void onCountrySelected(Country selectedCountry) {
-                map.put("Country",binding.ccp.getSelectedCountryName());
-            }
-        });
 
         custom_progress_dialog=new custom_progress_dialog(getContext());
 
@@ -83,14 +77,6 @@ public class edit_profile_fragment extends Fragment {
                 if(binding.editDescription.getText().toString().trim().length()!=0)
                 {
                     map.put("Description",binding.editDescription.getText().toString());
-                }
-                if(binding.editState.getText().toString().trim().length()!=0)
-                {
-                    map.put("State",binding.editState.getText().toString());
-                }
-                if(binding.editCity.getText().toString().trim().length()!=0)
-                {
-                    map.put("City",binding.editCity.getText().toString());
                 }
                 if(!map.isEmpty()) {
                     custom_progress_dialog.show();

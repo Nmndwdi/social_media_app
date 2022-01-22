@@ -29,6 +29,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 
 public class user_profile_fragment extends Fragment {
@@ -55,41 +57,31 @@ public class user_profile_fragment extends Fragment {
         String index_fullname=getArguments().getString("index_fullname");
         String index_profile_pic=getArguments().getString("index_profile_pic");
         String index_user_description=getArguments().getString("index_user_description");
+        ArrayList<Map<String,Object>>posts= (ArrayList<Map<String, Object>>) getArguments().getSerializable("index_posts");
 
 //        Picasso.get().load(index_profile_pic).into(binding.userProfileImage);
         Glide.with(getContext()).load(index_profile_pic).into(binding.userProfileImage);
         binding.userProfileFullname.setText(index_fullname);
         binding.userProfileDescription.setText(index_user_description);
+        binding.userProfileNumberPosts.setText(Integer.toString(posts.size()));
 
         binding.userProfileRecyclerview.setLayoutManager(new GridLayoutManager(getContext(),2));
+
 
         auth=FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
 
-        db.collection("images").document("posts").collection(index_userid).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if(e!=null)
-                {
-                    Log.d("user_profile_read","user_profile_read_failed");
-                    return;
-                }
-                else
-                {
-                    arrayList.clear();
-                    for(QueryDocumentSnapshot doc:value)
-                    {
-                        user_profile_model_class user_profile_model_class=new user_profile_model_class();
-                        String user_profile_image=doc.getString("post");
-                        user_profile_model_class.setUser_profile_image(user_profile_image);
-                        arrayList.add(user_profile_model_class);
-                    }
-                    user_profile_adapter_recyclerview user_profile_adapter_recyclerview=new user_profile_adapter_recyclerview(getContext(),arrayList);
-                    binding.userProfileRecyclerview.setAdapter(user_profile_adapter_recyclerview);
-                    binding.userProfileNumberPosts.setText(Integer.toString(arrayList.size()));
-                }
-            }
-        });
+        for (Map<String, Object> post:posts) {
+            Map<String,Object>map=post;
+            String userpost= String.valueOf(map.get("post"));
+            String post_description=String.valueOf(map.get("post_description"));
+            user_profile_model_class user_profile_model_class=new user_profile_model_class();
+            user_profile_model_class.setUser_posts(userpost);
+            user_profile_model_class.setPost_description(post_description);
+            arrayList.add(user_profile_model_class);
+        }
+        user_profile_adapter_recyclerview user_profile_adapter_recyclerview=new user_profile_adapter_recyclerview(getContext(),this.arrayList);
+        binding.userProfileRecyclerview.setAdapter(user_profile_adapter_recyclerview);
 
         instance=this;
         binding.messageUserScreen.setOnClickListener(new View.OnClickListener() {

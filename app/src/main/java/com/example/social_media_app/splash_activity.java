@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -44,58 +45,16 @@ public class splash_activity extends AppCompatActivity {
                     auth = FirebaseAuth.getInstance();
                     FirebaseUser user = auth.getCurrentUser();
                     if (user != null) {
-                        String userid = user.getUid();
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        DocumentReference documentReference=db.collection("Boys").document(userid);
-                        DocumentReference documentReference1=db.collection("Girls").document(userid);
-                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.isSuccessful())
-                                {
-                                    DocumentSnapshot document= task.getResult();
-                                    if(document.exists())
-                                    {
-                                        String gender= document.getString("gender");
-                                        Intent intent = new Intent(splash_activity.this, MainActivity.class);
-                                        intent.putExtra("gender_key",gender);
-                                        startActivity(intent);
-                                    }
-                                    else
-                                    {
-                                        documentReference1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if(task.isSuccessful())
-                                                {
-                                                    DocumentSnapshot document= task.getResult();
-                                                    if(document.exists())
-                                                    {
-                                                        String gender= document.getString("gender");
-                                                        Intent intent = new Intent(splash_activity.this, MainActivity.class);
-                                                        intent.putExtra("gender_key",gender);
-                                                        startActivity(intent);
-                                                    }
-                                                    else
-                                                    {
-                                                        Intent intent=new Intent(splash_activity.this,signup_activity.class);
-                                                        startActivity(intent);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Log.d("Error", "Error during gettin document");
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
-                                else
-                                {
-                                    Log.d("Error", "Error during gettin document");
-                                }
-                            }
-                        });
+                        SharedPreferences sharedPreferences=getSharedPreferences("gender_file",MODE_PRIVATE);
+                        if(sharedPreferences.contains("signin_with_google")){
+                            Intent intent=new Intent(splash_activity.this,MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent=new Intent(splash_activity.this,signup_activity.class);
+                            startActivity(intent);
+                        }
                     }
                     else
                     {

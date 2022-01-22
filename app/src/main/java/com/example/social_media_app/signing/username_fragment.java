@@ -1,6 +1,8 @@
 package com.example.social_media_app.signing;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -51,7 +54,7 @@ public class username_fragment extends Fragment {
         login_fragment login_fragment = new login_fragment();
         signup_fragment signup_fragment = new signup_fragment();
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        binding.next.setOnClickListener(new View.OnClickListener() {
+        binding.signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 transaction.replace(R.id.linear, signup_fragment)
@@ -126,43 +129,6 @@ public class username_fragment extends Fragment {
             }
         }
     }
-//    public void firebaseAuthWithGoogle(String idToken) {
-//        FirebaseAuth auth=FirebaseAuth.getInstance();
-//        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-//        auth.signInWithCredential(credential)
-//                .addOnCompleteListener( getActivity(),new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            if(login_tag.equals("username_fragment")) {
-//                                // Sign in success, update UI with the signed-in user's information
-//                                Toast.makeText(getContext(), "signInWithCredential:success", Toast.LENGTH_SHORT).show();
-//                                FirebaseUser user = auth.getCurrentUser();
-//                                String userid = user.getUid();
-//                                String email = "";
-//                                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
-//                                if (account != null) {
-//                                    email = account.getEmail();
-//                                }
-//                                Bundle bundle = new Bundle();
-//                                bundle.putString("userid", userid);
-//                                bundle.putString("email", email);
-//                                google_sign_in_info_fragment google_sign_in_info_fragment = new google_sign_in_info_fragment();
-//                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//                                google_sign_in_info_fragment.setArguments(bundle);
-//                                transaction.replace(R.id.linear, google_sign_in_info_fragment).commit();
-//                            }
-//                            else if(login_tag.equals("login_fragment"))
-//                            {
-//                                Toast.makeText(getContext(), "Login_success", Toast.LENGTH_SHORT).show();
-//                            }
-//                        } else {
-//                            // If sign in fails, display a message to the user.
-//                            Toast.makeText(getContext(), "signInWithCredential:failure", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
 
     public void firebaseAuthWithGoogle(String idToken) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -172,65 +138,88 @@ public class username_fragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            String userid = auth.getCurrentUser().getUid();
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            DocumentReference documentReference = db.collection("Boys").document(userid);
-                            DocumentReference documentReference1 = db.collection("Girls").document(userid);
-                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            String gender=document.getString("gender");
-                                            Toast.makeText(getContext(), "Login_success", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(getContext(), MainActivity.class);
-                                            intent.putExtra("gender_key",gender);
-                                            startActivity(intent);
-                                        } else {
-                                            documentReference1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot document = task.getResult();
-                                                        if (document.exists()) {
-                                                            String gender=document.getString("gender");
-                                                            Toast.makeText(getContext(), "Login_success", Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(getContext(), MainActivity.class);
-                                                            intent.putExtra("gender_key",gender);
-                                                            startActivity(intent);
-                                                        } else {
-                                                            // Sign in success, update UI with the signed-in user's information
-                                                            Toast.makeText(getContext(), "signInWithCredential:success", Toast.LENGTH_SHORT).show();
-                                                            FirebaseUser user = auth.getCurrentUser();
-                                                            String userid = user.getUid();
-                                                            String email = "";
-                                                            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
-                                                            if (account != null) {
-                                                                email = account.getEmail();
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences("gender_file", Context.MODE_PRIVATE);
+                            if (sharedPreferences.contains("signin_with_google")) {
+                                Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                            } else {
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                String userid = auth.getCurrentUser().getUid();
+                                DocumentReference documentReference = db.collection("Boys").document(userid);
+                                DocumentReference documentReference1 = db.collection("Girls").document(userid);
+                                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putString("gender_key", "Girls");
+                                                editor.putString("user_gender_key", "Boys");
+                                                editor.putBoolean("signin_with_google", true);
+                                                editor.apply();
+                                                Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                                startActivity(intent);
+                                            } else {
+                                                documentReference1.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document.exists()) {
+                                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                                editor.putString("gender_key", "Boys");
+                                                                editor.putString("user_gender_key", "Girls");
+                                                                editor.putBoolean("signin_with_google", true);
+                                                                editor.apply();
+                                                                Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+                                                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                                                startActivity(intent);
+                                                            } else {
+                                                                Toast.makeText(getContext(), "Complete your Profile", Toast.LENGTH_SHORT).show();
+                                                                FirebaseUser user = auth.getCurrentUser();
+                                                                String userid = user.getUid();
+                                                                String email = "";
+                                                                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
+                                                                if (account != null) {
+                                                                    email = account.getEmail();
+                                                                }
+                                                                Bundle bundle = new Bundle();
+                                                                bundle.putString("userid", userid);
+                                                                bundle.putString("email", email);
+                                                                google_sign_in_info_fragment google_sign_in_info_fragment = new google_sign_in_info_fragment();
+                                                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                                                                google_sign_in_info_fragment.setArguments(bundle);
+                                                                transaction.replace(R.id.linear, google_sign_in_info_fragment).commit();
                                                             }
-                                                            Bundle bundle = new Bundle();
-                                                            bundle.putString("userid", userid);
-                                                            bundle.putString("email", email);
-                                                            google_sign_in_info_fragment google_sign_in_info_fragment = new google_sign_in_info_fragment();
-                                                            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                                                            google_sign_in_info_fragment.setArguments(bundle);
-                                                            transaction.replace(R.id.linear, google_sign_in_info_fragment).commit();
                                                         }
-                                                    } else {
-                                                        Log.d("Error", "Error during gettin document");
                                                     }
-                                                }
-                                            });
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                    }
+                                                });
+                                            }
                                         }
-                                    } else {
-                                        Log.d("Error", "Error during gettin document");
                                     }
-                                }
-                            });
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getContext(), "signInWithCredential:failure", Toast.LENGTH_SHORT).show();
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences("gender_file", Context.MODE_PRIVATE);
+                            if (sharedPreferences.contains("signin_with_google")) {
+                                Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "signIn failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });

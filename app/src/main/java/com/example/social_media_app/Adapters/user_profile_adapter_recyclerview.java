@@ -37,9 +37,9 @@ public class user_profile_adapter_recyclerview extends RecyclerView.Adapter<user
 
     @Override
     public void onBindViewHolder(@NonNull user_profile_viewholder holder, int position) {
-        String profile_image=arrayList.get(position).getUser_profile_image();
+        String user_posts=arrayList.get(position).getUser_posts();
 //        Picasso.get().load(profile_image).into(holder.user_profile_image);
-        Glide.with(context).load(profile_image).into(holder.user_profile_image);
+        Glide.with(context).load(user_posts).into(holder.user_post);
 
     }
 
@@ -50,10 +50,10 @@ public class user_profile_adapter_recyclerview extends RecyclerView.Adapter<user
 
     public class user_profile_viewholder extends RecyclerView.ViewHolder{
 
-        ImageView user_profile_image;
+        ImageView user_post;
         public user_profile_viewholder(@NonNull View itemView) {
             super(itemView);
-            user_profile_image=(ImageView) itemView.findViewById(R.id.user_profile_image);
+            user_post=(ImageView) itemView.findViewById(R.id.user_post);
         }
     }
 }

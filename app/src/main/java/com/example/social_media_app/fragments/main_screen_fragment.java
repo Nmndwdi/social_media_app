@@ -1,7 +1,6 @@
 package com.example.social_media_app.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,16 +17,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.social_media_app.Adapters.main_screen_adapter_recyclerview;
 import com.example.social_media_app.MainActivity;
 import com.example.social_media_app.R;
-import com.example.social_media_app.animationss.custom_progress_dialog;
-import com.example.social_media_app.databasing.databasing_read;
 import com.example.social_media_app.databinding.FragmentMainScreenFragmentBinding;
 import com.example.social_media_app.holder_fragments.main_screen_holder_fragment;
 import com.example.social_media_app.model_classes.main_screen_model_class;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,6 +35,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class main_screen_fragment extends Fragment {
@@ -94,6 +94,54 @@ public class main_screen_fragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+//        db.collection(gender_key).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful())
+//                {
+//                    arrayList.clear();
+//                    for (QueryDocumentSnapshot doc : task.getResult()) {
+//                        main_screen_model_class main_screen_model_class = new main_screen_model_class();
+//                        Boolean saved_profile=false;
+//                        if(doc.contains(auth.getCurrentUser().getUid()))
+//                        {
+//                            if(doc.getBoolean(auth.getCurrentUser().getUid())) {
+//                                saved_profile = true;
+//                            }
+//                        }
+//                        String username = doc.getString("Username");
+//                        String fullname = doc.getString("Fullname");
+//                        String post_description = doc.getString("post_description");
+//                        String latest_pic = doc.getString("latest_pic");
+//                        String profile_image = doc.getString("Profile_image");
+//                        String user_description=doc.getString("Description");
+//                        ArrayList<Map<String,Object>> posts=(ArrayList<Map<String,Object>>) doc.get("Posts");
+//                        main_screen_model_class.setPosts(posts);
+//                        main_screen_model_class.setUsername(username);
+//                        main_screen_model_class.setFullname(fullname);
+//                        main_screen_model_class.setImage_description(post_description);
+//                        main_screen_model_class.setUploaded_image(latest_pic);
+//                        main_screen_model_class.setProfile_image(profile_image);
+//                        main_screen_model_class.setUserid(doc.getId());
+//                        main_screen_model_class.setUser_description(user_description);
+//                        main_screen_model_class.setSaved_profile(saved_profile);
+//                        arrayList.add(main_screen_model_class);
+//                    }
+//                    main_screen_adapter_recyclerview main_screen_adapter_recyclerview=new main_screen_adapter_recyclerview(getContext(),arrayList);
+//                    binding.mainScreenRecycler.setAdapter(main_screen_adapter_recyclerview);
+//                }
+//                else
+//                {
+//                    Log.d("main_read", "main_read_failed");
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//
+//            }
+//        });
+
         db.collection(gender_key).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -105,9 +153,9 @@ public class main_screen_fragment extends Fragment {
                     for (QueryDocumentSnapshot doc : value) {
                         main_screen_model_class main_screen_model_class = new main_screen_model_class();
                         Boolean saved_profile=false;
-                        if(doc.contains(auth.getCurrentUser().getUid()+doc.getId()))
+                        if(doc.contains(auth.getCurrentUser().getUid()))
                         {
-                            if(doc.getBoolean(auth.getCurrentUser().getUid()+doc.getId())) {
+                            if(doc.getBoolean(auth.getCurrentUser().getUid())) {
                                 saved_profile = true;
                             }
                         }
@@ -117,6 +165,8 @@ public class main_screen_fragment extends Fragment {
                         String latest_pic = doc.getString("latest_pic");
                         String profile_image = doc.getString("Profile_image");
                         String user_description=doc.getString("Description");
+                        ArrayList<Map<String,Object>> posts=(ArrayList<Map<String,Object>>) doc.get("Posts");
+                        main_screen_model_class.setPosts(posts);
                         main_screen_model_class.setUsername(username);
                         main_screen_model_class.setFullname(fullname);
                         main_screen_model_class.setImage_description(post_description);
@@ -142,7 +192,7 @@ public class main_screen_fragment extends Fragment {
         return instance;
     }
 
-    public void switch_user_profile_fragment(String userid,String fullname,String profile_pic,String user_description)
+    public void switch_user_profile_fragment(String userid,String fullname,String profile_pic,String user_description,ArrayList<Map<String,Object>>posts)
     {
         Bundle bundle=new Bundle();
         bundle.putString("index_fragment","main_fragment");
@@ -150,6 +200,7 @@ public class main_screen_fragment extends Fragment {
         bundle.putString("index_fullname",fullname);
         bundle.putString("index_profile_pic",profile_pic);
         bundle.putString("index_user_description",user_description);
+        bundle.putSerializable("index_posts",posts);
         user_profile_fragment user_profile_fragment=new user_profile_fragment();
         main_screen_holder_fragment.getInstance().main_screen_main_fragment_push();
         user_profile_fragment.setArguments(bundle);

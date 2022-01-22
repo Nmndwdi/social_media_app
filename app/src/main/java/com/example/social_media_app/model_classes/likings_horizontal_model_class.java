@@ -1,19 +1,31 @@
 package com.example.social_media_app.model_classes;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class likings_horizontal_model_class {
-    String last_pic,fullname,userid,profile_pic,user_description;
+    String latest_pic,fullname,userid,profile_pic,user_description;
+    ArrayList<Map<String,Object>> posts=new ArrayList<>();
 
     public likings_horizontal_model_class()
     {
 
     }
 
-    public likings_horizontal_model_class(String last_pic, String fullname, String userid, String profile_pic, String user_description) {
-        this.last_pic = last_pic;
+    public likings_horizontal_model_class(String latest_pic, String fullname, String userid, String profile_pic, String user_description) {
+        this. latest_pic=latest_pic;
         this.fullname = fullname;
         this.userid = userid;
         this.profile_pic = profile_pic;
         this.user_description = user_description;
+    }
+
+    public ArrayList<Map<String, Object>> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(ArrayList<Map<String, Object>> posts) {
+        this.posts = posts;
     }
 
     public String getUserid() {
@@ -40,12 +52,12 @@ public class likings_horizontal_model_class {
         this.user_description = user_description;
     }
 
-    public String getLast_pic() {
-        return last_pic;
+    public String getLatest_pic() {
+        return latest_pic;
     }
 
-    public void setLast_pic(String last_pic) {
-        this.last_pic = last_pic;
+    public void setLatest_pic(String latest_pic) {
+        this.latest_pic = latest_pic;
     }
 
     public String getFullname() {

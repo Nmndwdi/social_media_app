@@ -1,6 +1,8 @@
 package com.example.social_media_app.signing;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -64,10 +66,22 @@ public class signup_fragment extends Fragment {
                     if(st_gen.equals("1"))
                     {
                         gender="Boys";
+                        SharedPreferences sharedPreferences= getContext().getSharedPreferences("gender_file", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                        editor.putString("gender_key","Girls");
+                        editor.putString("user_gender_key",gender);
+                        editor.putBoolean("signin_with_google",true);
+                        editor.apply();
                     }
                     else if(st_gen.equals("2"))
                     {
                         gender="Girls";
+                        SharedPreferences sharedPreferences= getContext().getSharedPreferences("gender_file", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                        editor.putString("gender_key","Boys");
+                        editor.putString("user_gender_key",gender);
+                        editor.putBoolean("signin_with_google",true);
+                        editor.apply();
                     }
                     auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -80,7 +94,6 @@ public class signup_fragment extends Fragment {
                                 databasing_write databasing_write=new databasing_write(username,fullname,email,password,gender,age,userid);
                                 databasing_write.create_account();
                                 Intent intent=new Intent(getContext(), MainActivity.class);
-                                intent.putExtra("gender_key",gender);
                                 startActivity(intent);
                             }
                             else
@@ -91,14 +104,6 @@ public class signup_fragment extends Fragment {
                     });
                 }
             });
-
-//            GoogleSignInClient googleSignInClient =username_fragment.getInstance().create_request();
-//            binding.google.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    username_fragment.getInstance().signIn(googleSignInClient);
-//                }
-//            });
 
             return view;
     }

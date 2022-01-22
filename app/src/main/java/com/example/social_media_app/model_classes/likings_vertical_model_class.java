@@ -1,7 +1,12 @@
 package com.example.social_media_app.model_classes;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class likings_vertical_model_class {
     String profile_pic,username,userid,fullname,last_chat,user_description;
+    ArrayList<Map<String,Object>> posts=new ArrayList<>();
+
     public likings_vertical_model_class()
     {
 
@@ -14,6 +19,14 @@ public class likings_vertical_model_class {
         this.fullname = fullname;
         this.last_chat=last_chat;
         this.user_description=user_description;
+    }
+
+    public ArrayList<Map<String, Object>> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(ArrayList<Map<String, Object>> posts) {
+        this.posts = posts;
     }
 
     public String getUsername() {

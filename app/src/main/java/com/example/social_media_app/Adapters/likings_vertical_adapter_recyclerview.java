@@ -17,6 +17,7 @@ import com.example.social_media_app.fragments.likings_fragment;
 import com.example.social_media_app.model_classes.likings_vertical_model_class;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class likings_vertical_adapter_recyclerview extends RecyclerView.Adapter<likings_vertical_adapter_recyclerview.likings_vertical_viewholder>{
 
@@ -45,12 +46,13 @@ public class likings_vertical_adapter_recyclerview extends RecyclerView.Adapter<
         holder.fullname.setText(fullname);
         holder.username.setText(username);
         String profile_pic=arrayList.get(position).getProfile_pic();
+        ArrayList<Map<String,Object>>posts=arrayList.get(position).getPosts();
         Glide.with(context).load(profile_pic).into(holder.image);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                likings_fragment.getInstance().switch_fragment(userid,fullname,user_description,profile_pic);
+                likings_fragment.getInstance().switch_fragment(userid,fullname,user_description,profile_pic,posts);
             }
         });
 

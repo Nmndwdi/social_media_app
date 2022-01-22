@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_screen_adapter_recyclerview.main_screen_viewholder> {
     Context context;
@@ -50,6 +52,7 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
         String profile_pic = arrayList.get(position).getProfile_image();
         String user_description = arrayList.get(position).getUser_description();
         String uploaded_image=arrayList.get(position).getUploaded_image();
+        ArrayList<Map<String,Object>>posts=arrayList.get(position).getPosts();
         holder.username.setText(username);
         holder.fullname.setText(fullname);
 //        Picasso.get().load(profile_pic).into(holder.profile_image);
@@ -69,13 +72,13 @@ public class main_screen_adapter_recyclerview extends RecyclerView.Adapter<main_
         holder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                main_screen_fragment.getInstance().switch_user_profile_fragment(userid, fullname , profile_pic, user_description);
+                main_screen_fragment.getInstance().switch_user_profile_fragment(userid, fullname , profile_pic, user_description,posts);
             }
         });
         holder.fullname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                main_screen_fragment.getInstance().switch_user_profile_fragment(userid, fullname, profile_pic, user_description);
+                main_screen_fragment.getInstance().switch_user_profile_fragment(userid, fullname, profile_pic, user_description,posts);
             }
         });
         holder.message.setOnClickListener(new View.OnClickListener() {

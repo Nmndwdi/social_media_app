@@ -44,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class profile_fragment extends Fragment {
 
@@ -130,43 +131,28 @@ public class profile_fragment extends Fragment {
                         String fullname=snapshot.getString("Fullname");
                         String description=snapshot.getString("Description");
                         String profile_pic=snapshot.getString("Profile_image");
+                        ArrayList<Map<String,Object>> posts=(ArrayList<Map<String,Object>>) snapshot.get("Posts");
                         binding.profileFullname.setText(fullname);
                         binding.profileDescription.setText(description);
+                        binding.profileNumberPosts.setText(Integer.toString(posts.size()));
 //                        Picasso.get().load(profile_pic).into(binding.profileImage);
                         Glide.with(getContext()).load(profile_pic).into(binding.profileImage);
+                        for (Map<String,Object> post:posts) {
+                            Map<String,Object>map=post;
+                            String user_post=String.valueOf(map.get("post"));
+                            String post_description=String.valueOf(map.get("post_description"));
+                            profile_model_class profile_model_class=new profile_model_class();
+                            profile_model_class.setPost(user_post);
+                            profile_model_class.setPost_description(post_description);
+                            arrayList.add(profile_model_class);
+                            profile_adapter_recyclerview profile_adapter_recyclerview=new profile_adapter_recyclerview(getContext(),arrayList);
+                            binding.profileRecyclerview.setAdapter(profile_adapter_recyclerview);
+                        }
                     }
                     else
                     {
                         Log.d("profile_read","current_data_null");
                     }
-                }
-            }
-        });
-
-        db.collection("images").document("posts").collection(userid).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if(e!=null)
-                {
-                    Log.d("profile_images_read","profile_images_read_failed");
-                }
-                else
-                {
-                    if(getActivity()==null)
-                    {
-                        return;
-                    }
-                    arrayList.clear();
-                    for(QueryDocumentSnapshot doc:value)
-                    {
-                        profile_model_class profile_model_class=new profile_model_class();
-                        String profile_image=doc.getString("post");
-                        profile_model_class.setProfile_image(profile_image);
-                        arrayList.add(profile_model_class);
-                    }
-                    profile_adapter_recyclerview profile_adapter_recyclerview=new profile_adapter_recyclerview(getContext(),arrayList);
-                    binding.profileRecyclerview.setAdapter(profile_adapter_recyclerview);
-                    binding.profileNumberPosts.setText(Integer.toString(arrayList.size()));
                 }
             }
         });

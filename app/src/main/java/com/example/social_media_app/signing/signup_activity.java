@@ -36,10 +36,6 @@ public class signup_activity extends AppCompatActivity {
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //getSupportActionBar().hide();
-        username_fragment username_fragment = new username_fragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.linear, username_fragment);
-        transaction.commit();
 
     }
 
@@ -63,6 +59,13 @@ public class signup_activity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             google_sign_in_info_fragment.setArguments(bundle);
             transaction.replace(R.id.linear, google_sign_in_info_fragment).commit();
+        }
+        else
+        {
+            username_fragment username_fragment = new username_fragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.linear, username_fragment);
+            transaction.commit();
         }
     }
 

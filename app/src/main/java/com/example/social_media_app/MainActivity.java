@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -25,7 +26,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-    FirebaseUser user;
     TabLayout tabLayout;
     ViewPager viewPager;
     int backButtonCount=0;
@@ -46,15 +46,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setPageTransformer(false,new DepthPageTransformer());
         instance=this;
         viewPager.setOffscreenPageLimit(3);
-        gender=getIntent().getStringExtra("gender_key");
-        if(gender.equals("Boys"))
-        {
-            gender_key="Girls";
-        }
-        else if(gender.equals("Girls"))
-        {
-            gender_key="Boys";
-        }
+        SharedPreferences sharedPreferences=getSharedPreferences("gender_file",MODE_PRIVATE);
+        gender=sharedPreferences.getString("user_gender_key","");
+        gender_key=sharedPreferences.getString("gender_key","");
     }
 
     public String getGender_key()

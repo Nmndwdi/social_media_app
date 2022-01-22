@@ -1,8 +1,15 @@
 package com.example.social_media_app.model_classes;
 
+import com.example.social_media_app.MainActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+
 public class main_screen_model_class {
     String username,fullname,lastmessage,image_description,profile_image,uploaded_image,userid,user_description;
     Boolean saved_profile;
+    ArrayList<Map<String,Object>>posts=new ArrayList<>();
     public main_screen_model_class()
     {
 
@@ -15,6 +22,14 @@ public class main_screen_model_class {
         this.profile_image = profile_image;
         this.uploaded_image = uploaded_image;
         this.saved_profile=saved_profile;
+    }
+
+    public ArrayList<Map<String, Object>> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(ArrayList<Map<String, Object>> posts) {
+        this.posts = posts;
     }
 
     public Boolean getSaved_profile() {

@@ -15,9 +15,9 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/profile_post"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/profile_image"
                 android:elevation="3dp"
                 android:layout_margin="1dp"
                 android:scaleType="centerCrop"

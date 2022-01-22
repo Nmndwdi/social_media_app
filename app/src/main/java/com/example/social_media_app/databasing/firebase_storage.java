@@ -10,6 +10,7 @@ import com.example.social_media_app.fragments.post_fragment;
 import com.example.social_media_app.holder_fragments.profile_holder_fragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -75,55 +76,49 @@ public class firebase_storage {
         this.post_description = post_description;
     }
 
-    public void latest_pic()
+    public void create_post()
     {
-        storageReference= FirebaseStorage.getInstance().getReference("latest_pic");
         if(image_uri!=null)
         {
-            StorageReference fileref=storageReference.child(userid);
+            StorageReference fileref=FirebaseStorage.getInstance().getReference("latest_pic").child(userid);
             fileref.putFile(Uri.parse(image_uri)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    fileref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    StorageReference fileref1=FirebaseStorage.getInstance().getReference("post_image").child(userid).child(System.currentTimeMillis()+".");
+                    fileref1.putFile(Uri.parse(image_uri)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            db=FirebaseFirestore.getInstance();
-                            Map<String,Object>map=new HashMap<>();
-                            map.put("latest_pic",uri.toString());
-                            map.put("upload_time_latest_pic",System.currentTimeMillis());
-                            map.put("post_description",post_description);
-                            Map<String,Object>map1=new HashMap<>();
-                            map1.put("latest_pic",uri.toString());
-                            map1.put("post_description",post_description);
-                            db.collection("images").document("latest_pic").collection(userid).document("latest_pic").set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileref1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("firestore_img","successfully uploaded image");
-                                    db.collection(gender).document(userid).update(map1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                public void onSuccess(Uri uri) {
+                                    db=FirebaseFirestore.getInstance();
+                                    Map<String,Object>map=new HashMap<>();
+                                    map.put("post",uri.toString());
+                                    map.put("post_description",post_description);
+                                    db.collection(gender).document(userid).update("latest_pic",uri.toString(),"post_description",post_description,"Posts",FieldValue.arrayUnion(map)).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-//                                            profile_holder_fragment.getInstance().profile_screen_pop();
-//                                            post_fragment.getInstance().cancel_progress_dialog();
-                                            Log.d("success","success");
+                                            profile_holder_fragment.getInstance().profile_screen_pop();
+                                            post_fragment.getInstance().cancel_progress_dialog();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.d("fail","failed");
+
                                         }
                                     });
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d("firestore_upimg","image cant be uploaded to firebase");
+
                                 }
                             });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d("fail_download_url","url download failed");
+
                         }
                     });
                 }
@@ -131,52 +126,6 @@ public class firebase_storage {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d("fireuperr","image_upload_unsuccessful");
-                }
-            });
-        }
-    }
-
-    public void post_image()
-    {
-        storageReference=FirebaseStorage.getInstance().getReference("post_image");
-        if(image_uri!=null)
-        {
-            StorageReference fileref=storageReference.child(userid).child(System.currentTimeMillis()+".");
-            fileref.putFile(Uri.parse(image_uri)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    fileref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            db=FirebaseFirestore.getInstance();
-                            Map<String,Object>map=new HashMap<>();
-                            map.put("post",uri.toString());
-                            map.put("post_description",post_description);
-                            db.collection("images").document("posts").collection(userid).document(System.currentTimeMillis()+".").set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    profile_holder_fragment.getInstance().profile_screen_pop();
-                                    post_fragment.getInstance().cancel_progress_dialog();
-                                    Log.d("success","successfully uploaded post to firestore");
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("Error","error uploading in firestore");
-                                }
-                            });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("error","error getting url");
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("Error","error post image");
                 }
             });
         }
@@ -197,35 +146,19 @@ public class firebase_storage {
                             db=FirebaseFirestore.getInstance();
                             Map<String,Object>map=new HashMap<>();
                             map.put("Profile_image",uri.toString());
-                            map.put("upload_time_profile_pic",System.currentTimeMillis());
-                            Map<String,Object>map1=new HashMap<>();
-                            map1.put("Profile_image",uri.toString());
-                            db.collection("images").document("profile_image").collection(userid).document("profile_pic").set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            db.collection(gender).document(userid).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Log.d("firestore_img","successfully uploaded image");
-                                    db.collection(gender).document(userid).update(map1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            profile_holder_fragment.getInstance().profile_screen_pop();
-                                            edit_profile_fragment.getInstance().cancel_progress_dialog();
-                                            Log.d("success","success");
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-//                                            profile_holder_fragment.getInstance().profile_screen_pop();
-//                                            edit_profile_fragment.getInstance().cancel_progress_dialog();
-                                            Log.d("fail","failed");
-                                        }
-                                    });
+                                    profile_holder_fragment.getInstance().profile_screen_pop();
+                                    edit_profile_fragment.getInstance().cancel_progress_dialog();
+                                    Log.d("success","success");
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-//                                    profile_holder_fragment.getInstance().profile_screen_pop();
-//                                    edit_profile_fragment.getInstance().cancel_progress_dialog();
-                                    Log.d("firestore_upimg","image cant be uploaded to firebase");
+//                                            profile_holder_fragment.getInstance().profile_screen_pop();
+//                                            edit_profile_fragment.getInstance().cancel_progress_dialog();
+                                    Log.d("fail","failed");
                                 }
                             });
                         }

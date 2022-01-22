@@ -16,6 +16,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,12 +144,10 @@ public class databasing_write {
         user.put("timestamp", System.currentTimeMillis());
         user.put("Profile_image", null);
         user.put("Description", null);
-        user.put("Country", "Not selected");
-        user.put("State", null);
-        user.put("City", null);
         user.put("gender", gender);
         user.put("latest_pic", null);
         user.put("post_description", null);
+        user.put("Posts", Arrays.asList());
         db.collection(gender).document(userid)
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -172,12 +172,10 @@ public class databasing_write {
         user.put("timestamp", System.currentTimeMillis());
         user.put("Profile_image", null);
         user.put("Description", null);
-        user.put("Country", "Not selected");
-        user.put("State", null);
-        user.put("City", null);
         user.put("gender", gender);
         user.put("latest_pic", null);
         user.put("post_description", null);
+        user.put("Posts", Arrays.asList());
         db.collection(gender).document(userid)
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -216,67 +214,36 @@ public class databasing_write {
     public void save_profile(Boolean saved_profile) {
         if (!saved_profile) {
             db = FirebaseFirestore.getInstance();
-            Map<String, Object> map = new HashMap<>();
             Map<String, Object> map1 = new HashMap<>();
-            map.put("saved", save_userid);
-            map.put("username",username);
-            map.put("fullname",fullname);
-            map.put("profile_pic",profile_pic);
-            map.put("last_pic",last_pic);
-            map.put("user_description",user_description);
-            map.put("save_time", System.currentTimeMillis());
-            map1.put(userid + save_userid, true);
-            db.collection("likings").document("saved_profiles").collection(userid).document(save_userid).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            map1.put(userid, true);
+            db.collection(gender).document(save_userid).set(map1, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    Log.d("likings_success", "success");
-                    db.collection(gender).document(save_userid).set(map1, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("success","success");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("failure","failure");
-                        }
-                    });
+                    Log.d("success","success");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d("likings_failed", "failed");
+                    Log.d("failure","failure");
                 }
             });
         }
         else
         {
             db=FirebaseFirestore.getInstance();
-            db.collection("likings").document("saved_profiles").collection(userid).document(save_userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            Map<String, Object> map1 = new HashMap<>();
+            map1.put(userid, false);
+            db.collection(gender).document(save_userid).set(map1,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    Log.d("success","successfullly_deleted");
-                    Map<String, Object> map1 = new HashMap<>();
-                    map1.put(userid + save_userid, false);
-                    db.collection(gender).document(save_userid).set(map1,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("success","success");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("failure","failure");
-                        }
-                    });
+                    Log.d("success","success");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d("failure","cannot delete the saved_profile");
+                    Log.d("failure","failure");
                 }
             });
         }
     }
-
 }
